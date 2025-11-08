@@ -12,24 +12,25 @@ export function LoginForm(){
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 bg-white p-4 rounded shadow">
+    <form onSubmit={handleSubmit}>
+      <h6>Login</h6>
       <div>
-        <label className="block text-sm font-medium">Email</label>
-        <input type="email" value={email} onChange={e=>setEmail(e.target.value)} className="mt-1 block w-full border px-3 py-2 rounded" required />
+        <label>Email</label>
+        <input type="email" value={email} onChange={e=>setEmail(e.target.value)} required />
       </div>
       <div>
-        <label className="block text-sm font-medium">Password</label>
-        <input type="password" value={password} onChange={e=>setPassword(e.target.value)} className="mt-1 block w-full border px-3 py-2 rounded" required />
+        <label>Password</label>
+        <input type="password" value={password} onChange={e=>setPassword(e.target.value)} required />
       </div>
       <div>
-        <label className="block text-sm font-medium">Role</label>
-        <select value={role} onChange={e=>setRole(e.target.value)} className="mt-1 block w-full border px-3 py-2 rounded">
+        <label>Role</label>
+        <select value={role} onChange={e=>setRole(e.target.value)}>
           <option value="patient">Patient</option>
           <option value="provider">Provider</option>
         </select>
       </div>
-      <div className="flex justify-end">
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">Sign in</button>
+      <div>
+        <button type="submit">Sign in</button>
       </div>
     </form>
   )
