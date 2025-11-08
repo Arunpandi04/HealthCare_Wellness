@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
+import doctorImg from '../assets/doctor.png'
 
 export default function Home(){
   return (
@@ -89,7 +90,7 @@ export default function Home(){
           </div>
           <div className="col-lg-6 d-none d-lg-block">
             <img 
-              src="https://img.freepik.com/free-photo/medium-shot-smiley-doctor-wearing-coat_23-2149355053.jpg" 
+              src={doctorImg}
               alt="Healthcare Professional" 
               className="img-fluid rounded-4 shadow-lg"
             />
