@@ -13,7 +13,7 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({ allowOrigin: true }));
 app.use(express.json());
 
 // Routes

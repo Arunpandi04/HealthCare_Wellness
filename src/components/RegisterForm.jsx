@@ -1,6 +1,14 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
+import {
+  Container,
+  Form,
+  Button,
+  Row,
+  Col,
+  Card,
+  Alert,
+} from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -24,8 +32,22 @@ export default function RegisterForm() {
   });
 
   const [errors, setErrors] = useState({});
-const navigate = useNavigate();
-  // ✅ Validation logic
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
+  const {
+    fullName,
+    email,
+    password,
+    confirmPassword,
+    role,
+    gender,
+    age,
+    location,
+    consentAccepted,
+    professionalInfo,
+  } = formData;
+  // ✅ Validation logic (same as before)
   const validateForm = () => {
     const newErrors = {};
     const {
@@ -63,15 +85,13 @@ const navigate = useNavigate();
     if (!gender) newErrors.gender = "Please select a gender";
 
     if (!age) newErrors.age = "Please enter your age";
-    else if (isNaN(age) || age < 18)
-      newErrors.age = "Age must be 18 or above";
+    else if (isNaN(age) || age < 18) newErrors.age = "Age must be 18 or above";
 
     if (!location.trim()) newErrors.location = "Location is required";
 
     if (!consentAccepted)
       newErrors.consentAccepted = "You must accept consent to register";
 
-    // ✅ Optional professional info
     if (role === "healthcare_provider") {
       const { specialization, experience, licenseNumber } = professionalInfo;
       const anyField =
@@ -91,7 +111,6 @@ const navigate = useNavigate();
     return !Object.keys(newErrors).length;
   };
 
-  // ✅ Handle input change
   const handleChange = (field, value, nested = false) => {
     setErrors((prev) => {
       const updated = { ...prev };
@@ -109,41 +128,53 @@ const navigate = useNavigate();
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    // ✅ Remove confirmPassword before API call
+    setLoading(true);
+    setMessage("");
+
     const { confirmPassword, ...dataToSend } = formData;
 
-    console.log("✅ Registering:", dataToSend);
+    try {
+      const response = await axios.post(
+        "http://localhost:9000/api/auth/register",
+        dataToSend,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
-    // axios
-    //   .post("YOUR_API_ENDPOINT", dataToSend, {
-    //     headers: { "Content-Type": "application/json" },
-    //   })
-    //   .then(() => alert("Registration successful!"))
-    //   .catch(() => alert("Registration failed."));
-    navigate("/patient/dashboard");
+      setMessage("Registration successful! Redirecting to login...");
+
+      // Redirect to login after 2 seconds
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    } catch (error) {
+      setMessage(
+        error.response?.data?.message ||
+          "Registration failed. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const {
-    fullName,
-    email,
-    password,
-    confirmPassword,
-    role,
-    gender,
-    age,
-    location,
-    consentAccepted,
-    professionalInfo,
-  } = formData;
-
+  // ... (rest of the form JSX remains the same, just add Alert for message)
   return (
     <Container className="d-flex justify-content-center align-items-center min-vh-100 bg-light py-5">
       <Card className="p-4 shadow-sm w-100" style={{ maxWidth: "900px" }}>
         <h3 className="text-center mb-4">User Registration</h3>
+
+        {message && (
+          <Alert
+            variant={message.includes("successful") ? "success" : "danger"}
+          >
+            {message}
+          </Alert>
+        )}
 
         <Form noValidate onSubmit={handleSubmit}>
           <Row>
@@ -286,7 +317,9 @@ const navigate = useNavigate();
                   type="checkbox"
                   label="I consent to my health data being used according to the privacy policy"
                   checked={consentAccepted}
-                  onChange={(e) => handleChange("consentAccepted", e.target.checked)}
+                  onChange={(e) =>
+                    handleChange("consentAccepted", e.target.checked)
+                  }
                   isInvalid={!!errors.consentAccepted}
                 />
                 {errors.consentAccepted && (
@@ -357,11 +390,10 @@ const navigate = useNavigate();
               </Row>
             </>
           )}
-
           <Row className="mt-4">
             <Col className="text-end">
-              <Button type="submit" variant="primary">
-                Register
+              <Button type="submit" variant="primary" disabled={loading}>
+                {loading ? "Registering..." : "Register"}
               </Button>
             </Col>
           </Row>

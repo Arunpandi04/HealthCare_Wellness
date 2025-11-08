@@ -1,6 +1,14 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Container, Form, Button, Card, Row, Col } from "react-bootstrap";
+import {
+  Container,
+  Form,
+  Button,
+  Card,
+  Row,
+  Col,
+  Alert,
+} from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -13,10 +21,11 @@ export function LoginForm() {
   });
 
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const navigate = useNavigate();
 
-  // ✅ Validation
   const validateForm = () => {
     const newErrors = {};
     const { email, password, role } = formData;
@@ -35,7 +44,6 @@ export function LoginForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // ✅ Handle input & clear error dynamically
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     setErrors((prev) => {
@@ -44,24 +52,78 @@ export function LoginForm() {
       return updated;
     });
   };
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    console.log("Login:", formData);
-    // axios.post("", formData, {
-    //   headers: { "Content-Type": "application/json" },
-    // });
-    //for now skipping actual API call
-    navigate("/patient/dashboard");
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const response = await axios.post(
+        "http://localhost:9000/api/auth/login",
+        formData,
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      console.log("Login response:", response.data);
+
+      // Adjust to your backend shape
+      const token = response.data.token;
+      const user = {
+        _id: response.data._id,
+        fullName: response.data.fullName,
+        email: response.data.email,
+        role: response.data.role,
+      };
+
+      if (!token) {
+        throw new Error("Missing token in server response");
+      }
+
+      // Store in localStorage
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("userData", JSON.stringify(user));
+
+      setMessage("Login successful! Redirecting...");
+
+      // Redirect based on role safely
+      setTimeout(() => {
+        if (!user?.role) {
+          console.warn("Missing user role, redirecting to home:", user);
+          navigate("/");
+          return;
+        }
+
+        if (user.role === "patient") {
+          navigate("/patient/dashboard");
+        } else if (["healthcare_provider", "doctor"].includes(user.role)) {
+          navigate("/provider/dashboard");
+        } else {
+          navigate("/");
+        }
+      }, 1500);
+    } catch (error) {
+      console.error("Login error:", error);
+      setMessage(
+        error.response?.data?.message ||
+          error.message ||
+          "Login failed. Please check your credentials."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const { email, password, role } = formData;
 
   return (
-    <Container fluid className="bg-light min-vh-100 d-flex align-items-center justify-content-center">
+    <Container
+      fluid
+      className="bg-light min-vh-100 d-flex align-items-center justify-content-center"
+    >
       <Row className="w-100 px-3">
-        {/* LEFT SIDE (Illustration / Info for desktop only) */}
         <Col
           md={6}
           className="d-none d-md-flex flex-column justify-content-center align-items-center text-center"
@@ -69,11 +131,11 @@ export function LoginForm() {
         >
           <h2 className="fw-bold text-primary mb-3">Welcome Back!</h2>
           <p className="text-muted" style={{ maxWidth: "80%" }}>
-            Sign in to access your patient or provider dashboard and manage your health data securely.
+            Sign in to access your patient or provider dashboard and manage your
+            health data securely.
           </p>
         </Col>
 
-        {/* RIGHT SIDE (Login Card) */}
         <Col
           xs={12}
           md={6}
@@ -82,8 +144,15 @@ export function LoginForm() {
           <Card className="p-4 shadow-sm w-100" style={{ maxWidth: "400px" }}>
             <h4 className="text-center mb-4">Login</h4>
 
+            {message && (
+              <Alert
+                variant={message.includes("successful") ? "success" : "danger"}
+              >
+                {message}
+              </Alert>
+            )}
+
             <Form noValidate onSubmit={handleSubmit}>
-              {/* Email */}
               <Form.Group className="mb-3" controlId="formEmail">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
@@ -98,7 +167,6 @@ export function LoginForm() {
                 </Form.Control.Feedback>
               </Form.Group>
 
-              {/* Password */}
               <Form.Group className="mb-3" controlId="formPassword">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
@@ -113,7 +181,6 @@ export function LoginForm() {
                 </Form.Control.Feedback>
               </Form.Group>
 
-              {/* Role */}
               <Form.Group className="mb-4" controlId="formRole">
                 <Form.Label>Role</Form.Label>
                 <Form.Select
@@ -122,17 +189,19 @@ export function LoginForm() {
                   isInvalid={!!errors.role}
                 >
                   <option value="patient">Patient</option>
-                  <option value="provider">Provider</option>
+                  <option value="healthcare_provider">
+                    Healthcare Provider
+                  </option>
+                  <option value="doctor">Doctor</option>
                 </Form.Select>
                 <Form.Control.Feedback type="invalid">
                   {errors.role}
                 </Form.Control.Feedback>
               </Form.Group>
 
-              {/* Submit */}
               <div className="d-grid">
-                <Button variant="primary" type="submit">
-                  Sign In
+                <Button variant="primary" type="submit" disabled={loading}>
+                  {loading ? "Signing In..." : "Sign In"}
                 </Button>
               </div>
             </Form>
