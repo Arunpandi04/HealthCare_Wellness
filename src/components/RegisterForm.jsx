@@ -9,6 +9,7 @@ export default function RegisterForm() {
     fullName: "",
     email: "",
     password: "",
+    confirmPassword: "",
     role: "patient",
     gender: "",
     age: "",
@@ -30,6 +31,7 @@ export default function RegisterForm() {
       fullName,
       email,
       password,
+      confirmPassword,
       role,
       gender,
       age,
@@ -49,6 +51,11 @@ export default function RegisterForm() {
     if (!password.trim()) newErrors.password = "Password is required";
     else if (password.trim().length < 6)
       newErrors.password = "Password must be at least 6 characters";
+
+    if (!confirmPassword.trim())
+      newErrors.confirmPassword = "Confirm password is required";
+    else if (password !== confirmPassword)
+      newErrors.confirmPassword = "Passwords do not match";
 
     if (!role?.trim()) newErrors.role = "Please select a role";
 
@@ -83,7 +90,7 @@ export default function RegisterForm() {
     return !Object.keys(newErrors).length;
   };
 
-  // ✅ Handle changes & clear error dynamically
+  // ✅ Handle input change
   const handleChange = (field, value, nested = false) => {
     setErrors((prev) => {
       const updated = { ...prev };
@@ -105,15 +112,24 @@ export default function RegisterForm() {
     e.preventDefault();
     if (!validateForm()) return;
 
-    axios.post("", formData, {
-      headers: { "Content-Type": "application/json" },
-    });
+    // ✅ Remove confirmPassword before API call
+    const { confirmPassword, ...dataToSend } = formData;
+
+    console.log("✅ Registering:", dataToSend);
+
+    axios
+      .post("YOUR_API_ENDPOINT", dataToSend, {
+        headers: { "Content-Type": "application/json" },
+      })
+      .then(() => alert("Registration successful!"))
+      .catch(() => alert("Registration failed."));
   };
 
   const {
     fullName,
     email,
     password,
+    confirmPassword,
     role,
     gender,
     age,
@@ -128,7 +144,6 @@ export default function RegisterForm() {
         <h3 className="text-center mb-4">User Registration</h3>
 
         <Form noValidate onSubmit={handleSubmit}>
-          {/* TWO COLUMN LAYOUT */}
           <Row>
             <Col md={6}>
               {/* Full Name */}
@@ -176,6 +191,23 @@ export default function RegisterForm() {
                 </Form.Control.Feedback>
               </Form.Group>
 
+              {/* Confirm Password */}
+              <Form.Group className="mb-3">
+                <Form.Label>Confirm Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  value={confirmPassword}
+                  placeholder="Re-enter your password"
+                  onChange={(e) =>
+                    handleChange("confirmPassword", e.target.value)
+                  }
+                  isInvalid={!!errors.confirmPassword}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.confirmPassword}
+                </Form.Control.Feedback>
+              </Form.Group>
+
               {/* Role */}
               <Form.Group className="mb-3">
                 <Form.Label>Role</Form.Label>
@@ -186,7 +218,9 @@ export default function RegisterForm() {
                 >
                   <option value="">Select a role</option>
                   <option value="patient">Patient</option>
-                  <option value="healthcare_provider">Healthcare Provider</option>
+                  <option value="healthcare_provider">
+                    Healthcare Provider
+                  </option>
                   <option value="doctor">Doctor</option>
                 </Form.Select>
                 <Form.Control.Feedback type="invalid">
