@@ -1,0 +1,4 @@
+/* Bootstrap is used for base styles now. Tailwind directives removed. */
+
+html, body, #root { height: 100%; }
+body { background-color: #f8fafc; color: #111827; }
