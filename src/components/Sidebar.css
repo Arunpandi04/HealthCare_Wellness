@@ -1,0 +1,58 @@
+.app-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 220px;
+  background: #0aa0d6; /* blue */
+  color: #fff;
+  z-index: 1000;
+  display: flex;
+  align-items: stretch;
+}
+
+.sidebar-inner {
+  padding: 20px 16px;
+  width: 100%;
+  box-sizing: border-box;
+  /* keep content below any fixed header if present */
+  padding-top: 80px;
+}
+
+.sidebar-brand {
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidebar-nav .nav-link {
+  color: rgba(255,255,255,0.95);
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.sidebar-nav .nav-link:hover {
+  background: rgba(255,255,255,0.06);
+}
+
+/* helper layout class for pages that include the sidebar */
+.content-with-sidebar {
+  margin-left: 220px; /* same as sidebar width */
+}
+
+@media (max-width: 768px) {
+  .app-sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+  .content-with-sidebar { margin-left: 0; }
+}
