@@ -13,7 +13,8 @@ export default function Sidebar() {
           <NavLink to="/patient/profile" className={linkClass}>My Profile</NavLink>
           <NavLink to="/patient/goals" className={linkClass}>Wellness Goals</NavLink>
           <NavLink to="/patient/messages" className={linkClass}>Messages</NavLink>
-          <a className="nav-link" href="/">Logout</a>
+          <NavLink to="/patient/doctors" className={linkClass}>Doctors</NavLink>
+          <a className="nav-link" href="#">Logout</a>
         </nav>
       </div>
     </aside>

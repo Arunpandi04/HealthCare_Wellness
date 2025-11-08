@@ -9,7 +9,7 @@ import PatientProfile from "./pages/patient/PatientProfile";
 import PatientGoals from "./pages/patient/PatientGoals";
 import PatientMessages from "./pages/patient/PatientMessages";
 import Header from "./components/Header";
-import Find from "./pages/Find";
+import PatientDoctors from "./pages/patient/PatientDoctors";
 export default function App() {
   return (
     <div className="min-h-screen flex flex-col">
@@ -24,7 +24,7 @@ export default function App() {
           <Route path="/patient/profile" element={<PatientProfile />} />
           <Route path="/patient/goals" element={<PatientGoals />} />
           <Route path="/patient/messages" element={<PatientMessages />} />
-          <Route path="/patient/doctors" element={<Find />} />
+          <Route path="/patient/doctors" element={<PatientDoctors />} />
         </Routes>
       </main>
     </div>
