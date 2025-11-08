@@ -23,7 +23,7 @@ export default function RegisterForm() {
   });
 
   const [errors, setErrors] = useState({});
-
+const navigate = useNavigate();
   // ✅ Validation logic
   const validateForm = () => {
     const newErrors = {};
@@ -117,12 +117,13 @@ export default function RegisterForm() {
 
     console.log("✅ Registering:", dataToSend);
 
-    axios
-      .post("YOUR_API_ENDPOINT", dataToSend, {
-        headers: { "Content-Type": "application/json" },
-      })
-      .then(() => alert("Registration successful!"))
-      .catch(() => alert("Registration failed."));
+    // axios
+    //   .post("YOUR_API_ENDPOINT", dataToSend, {
+    //     headers: { "Content-Type": "application/json" },
+    //   })
+    //   .then(() => alert("Registration successful!"))
+    //   .catch(() => alert("Registration failed."));
+    navigate("/patient/dashboard");
   };
 
   const {
