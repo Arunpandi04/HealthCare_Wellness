@@ -9,7 +9,7 @@ export default function Home(){
         <div className="container">
           <Link className="navbar-brand d-flex align-items-center" to="/">
             <i className="bi bi-heart-pulse-fill text-primary me-2 fs-4"></i>
-            <span className="fs-4 fw-bold text-primary">Medicust</span>
+            <span className="fs-4 fw-bold text-primary">Health Care Portal</span>
           </Link>
           
           <button 

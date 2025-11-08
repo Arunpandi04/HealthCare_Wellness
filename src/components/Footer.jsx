@@ -13,7 +13,7 @@ export default function Footer() {
           <div className="col-12 col-lg-4 pe-lg-5">
             <Link to="/" className="d-inline-flex align-items-center mb-3 text-decoration-none">
               <i className="bi bi-heart-pulse-fill text-primary me-2 fs-4"></i>
-              <span className="fs-4 fw-bold text-primary">Medicust</span>
+              <span className="fs-4 fw-bold text-primary">Health Care Portal</span>
             </Link>
             <p className="text-muted mb-3">
               Providing quality healthcare services to help you maintain optimal health and wellness.
@@ -92,8 +92,8 @@ export default function Footer() {
               </li>
               <li className="mb-3 d-flex align-items-center">
                 <i className="bi bi-envelope text-primary me-2 fs-5"></i>
-                <a href="mailto:contact@medicust.com" className="text-muted text-decoration-none">
-                  contact@medicust.com
+                <a href="mailto:contact@healthcareportal.com" className="text-muted text-decoration-none">
+                  contact@healthcareportal.com
                 </a>
               </li>
               <li className="d-flex align-items-center">
@@ -110,8 +110,8 @@ export default function Footer() {
         <hr className="my-4" />
         <div className="row align-items-center">
           <div className="col-md-6 text-center text-md-start mb-3 mb-md-0">
-            <span className="text-muted">
-              © {currentYear} Medicust. All rights reserved.
+              <span className="text-muted">
+              © {currentYear} Health Care Portal. All rights reserved.
             </span>
           </div>
           <div className="col-md-6 text-center text-md-end">
