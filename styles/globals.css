@@ -1,0 +1,9 @@
+/* Bootstrap styles */
+html, body, #__next {
+  height: 100%;
+}
+
+body {
+  background-color: var(--bs-gray-100);
+  color: var(--bs-gray-900);
+}
