@@ -14,6 +14,8 @@ export function LoginForm() {
 
   const [errors, setErrors] = useState({});
 
+  const navigate = useNavigate();
+
   // ✅ Validation
   const validateForm = () => {
     const newErrors = {};
@@ -42,7 +44,6 @@ export function LoginForm() {
       return updated;
     });
   };
-  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validateForm()) return;
