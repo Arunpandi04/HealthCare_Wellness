@@ -8,11 +8,23 @@ export function ProfileEditor() {
   const [allergies, setAllergies] = useState('')
   const [medications, setMedications] = useState('')
 
-  function handleSave(e) {
-    e.preventDefault()
-    console.log('profile update', { name, email, phone, age, allergies, medications })
-    alert('Profile updated locally. Implement API call to persist changes.')
-  }
+  async function handleSave(e) {
+    e.preventDefault();
+    const patient = { name, email, phone, age, allergies, medications };
+    try {
+      // const response = await axios.post("https://api.example.com/patients", patient, {
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      // });
+
+      console.log("✅ Response:", patient);
+      alert("Profile updated successfully!");
+    } catch (error) {
+      console.error("❌ Error saving profile:", error);
+      alert("Failed to update profile. Please try again.");
+    }
+  };
 
   return (
     <form onSubmit={handleSave} className="bg-white p-4 rounded shadow space-y-3">
