@@ -9,7 +9,7 @@ export default function RegisterForm() {
     fullName: "",
     email: "",
     password: "",
-    role: "",
+    role: "patient",
     gender: "",
     age: "",
     location: "",
@@ -38,7 +38,6 @@ export default function RegisterForm() {
       professionalInfo,
     } = formData;
 
-    // Basic info
     if (!fullName.trim()) newErrors.fullName = "Full name is required";
     else if (fullName.trim().length < 3)
       newErrors.fullName = "Full name must be at least 3 characters";
@@ -64,7 +63,7 @@ export default function RegisterForm() {
     if (!consentAccepted)
       newErrors.consentAccepted = "You must accept consent to register";
 
-    // ✅ Professional Info (optional)
+    // ✅ Optional professional info
     if (role === "healthcare_provider") {
       const { specialization, experience, licenseNumber } = professionalInfo;
       const anyField =
@@ -84,7 +83,7 @@ export default function RegisterForm() {
     return !Object.keys(newErrors).length;
   };
 
-  // ✅ Handle field changes and clear error dynamically
+  // ✅ Handle changes & clear error dynamically
   const handleChange = (field, value, nested = false) => {
     setErrors((prev) => {
       const updated = { ...prev };
@@ -105,11 +104,10 @@ export default function RegisterForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    axios.post("", formData,{
-      headers: {
-        "Content-Type": 'Application/json',
-      }
-    })
+
+    axios.post("", formData, {
+      headers: { "Content-Type": "application/json" },
+    });
   };
 
   const {
@@ -125,198 +123,207 @@ export default function RegisterForm() {
   } = formData;
 
   return (
-    <Container className="d-flex justify-content-center align-items-center min-vh-100 bg-light">
-      <Card className="p-4 shadow-sm" style={{ width: "100%", maxWidth: "600px" }}>
+    <Container className="d-flex justify-content-center align-items-center min-vh-100 bg-light py-5">
+      <Card className="p-4 shadow-sm w-100" style={{ maxWidth: "900px" }}>
         <h3 className="text-center mb-4">User Registration</h3>
 
         <Form noValidate onSubmit={handleSubmit}>
-          {/* Full Name */}
-          <Form.Group className="mb-3">
-            <Form.Label>Full Name</Form.Label>
-            <Form.Control
-              type="text"
-              value={fullName}
-              placeholder="Enter your full name"
-              onChange={(e) => handleChange("fullName", e.target.value)}
-              isInvalid={!!errors.fullName}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.fullName}
-            </Form.Control.Feedback>
-          </Form.Group>
+          {/* TWO COLUMN LAYOUT */}
+          <Row>
+            <Col md={6}>
+              {/* Full Name */}
+              <Form.Group className="mb-3">
+                <Form.Label>Full Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={fullName}
+                  placeholder="Enter your full name"
+                  onChange={(e) => handleChange("fullName", e.target.value)}
+                  isInvalid={!!errors.fullName}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.fullName}
+                </Form.Control.Feedback>
+              </Form.Group>
 
-          {/* Email */}
-          <Form.Group className="mb-3">
-            <Form.Label>Email</Form.Label>
-            <Form.Control
-              type="email"
-              value={email}
-              placeholder="Enter your email"
-              onChange={(e) => handleChange("email", e.target.value)}
-              isInvalid={!!errors.email}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.email}
-            </Form.Control.Feedback>
-          </Form.Group>
+              {/* Email */}
+              <Form.Group className="mb-3">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  value={email}
+                  placeholder="Enter your email"
+                  onChange={(e) => handleChange("email", e.target.value)}
+                  isInvalid={!!errors.email}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.email}
+                </Form.Control.Feedback>
+              </Form.Group>
 
-          {/* Password */}
-          <Form.Group className="mb-3">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              value={password}
-              placeholder="Enter your password"
-              onChange={(e) => handleChange("password", e.target.value)}
-              isInvalid={!!errors.password}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.password}
-            </Form.Control.Feedback>
-          </Form.Group>
+              {/* Password */}
+              <Form.Group className="mb-3">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  value={password}
+                  placeholder="Enter your password"
+                  onChange={(e) => handleChange("password", e.target.value)}
+                  isInvalid={!!errors.password}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.password}
+                </Form.Control.Feedback>
+              </Form.Group>
 
-          {/* Role */}
-          <Form.Group className="mb-3">
-            <Form.Label>Role</Form.Label>
-            <Form.Select
-              value={role}
-              onChange={(e) => handleChange("role", e.target.value)}
-              isInvalid={!!errors.role}
-            >
-              <option value="">Select a role</option>
-              <option value="patient">Patient</option>
-              <option value="healthcare_provider">Healthcare Provider</option>
-              <option value="doctor">Doctor</option>
-            </Form.Select>
-            <Form.Control.Feedback type="invalid">
-              {errors.role}
-            </Form.Control.Feedback>
-          </Form.Group>
+              {/* Role */}
+              <Form.Group className="mb-3">
+                <Form.Label>Role</Form.Label>
+                <Form.Select
+                  value={role}
+                  onChange={(e) => handleChange("role", e.target.value)}
+                  isInvalid={!!errors.role}
+                >
+                  <option value="">Select a role</option>
+                  <option value="patient">Patient</option>
+                  <option value="healthcare_provider">Healthcare Provider</option>
+                  <option value="doctor">Doctor</option>
+                </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {errors.role}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
 
-          {/* Gender */}
-          <Form.Group className="mb-3">
-            <Form.Label>Gender</Form.Label>
-            <Form.Select
-              value={gender}
-              onChange={(e) => handleChange("gender", e.target.value)}
-              isInvalid={!!errors.gender}
-            >
-              <option value="">Select gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-            </Form.Select>
-            <Form.Control.Feedback type="invalid">
-              {errors.gender}
-            </Form.Control.Feedback>
-          </Form.Group>
+            <Col md={6}>
+              {/* Gender */}
+              <Form.Group className="mb-3">
+                <Form.Label>Gender</Form.Label>
+                <Form.Select
+                  value={gender}
+                  onChange={(e) => handleChange("gender", e.target.value)}
+                  isInvalid={!!errors.gender}
+                >
+                  <option value="">Select gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {errors.gender}
+                </Form.Control.Feedback>
+              </Form.Group>
 
-          {/* Age */}
-          <Form.Group className="mb-3">
-            <Form.Label>Age</Form.Label>
-            <Form.Control
-              type="number"
-              value={age}
-              placeholder="Enter your age"
-              onChange={(e) => handleChange("age", e.target.value)}
-              isInvalid={!!errors.age}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.age}
-            </Form.Control.Feedback>
-          </Form.Group>
+              {/* Age */}
+              <Form.Group className="mb-3">
+                <Form.Label>Age</Form.Label>
+                <Form.Control
+                  type="number"
+                  value={age}
+                  placeholder="Enter your age"
+                  onChange={(e) => handleChange("age", e.target.value)}
+                  isInvalid={!!errors.age}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.age}
+                </Form.Control.Feedback>
+              </Form.Group>
 
-          {/* Location */}
-          <Form.Group className="mb-3">
-            <Form.Label>Location</Form.Label>
-            <Form.Control
-              type="text"
-              value={location}
-              placeholder="Enter your location"
-              onChange={(e) => handleChange("location", e.target.value)}
-              isInvalid={!!errors.location}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.location}
-            </Form.Control.Feedback>
-          </Form.Group>
+              {/* Location */}
+              <Form.Group className="mb-3">
+                <Form.Label>Location</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={location}
+                  placeholder="Enter your location"
+                  onChange={(e) => handleChange("location", e.target.value)}
+                  isInvalid={!!errors.location}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.location}
+                </Form.Control.Feedback>
+              </Form.Group>
 
-          {/* Professional Info (Optional) */}
+              {/* Consent */}
+              <Form.Group className="mb-3">
+                <Form.Check
+                  type="checkbox"
+                  label="I consent to my health data being used according to the privacy policy"
+                  checked={consentAccepted}
+                  onChange={(e) => handleChange("consentAccepted", e.target.checked)}
+                  isInvalid={!!errors.consentAccepted}
+                />
+                {errors.consentAccepted && (
+                  <div className="invalid-feedback d-block">
+                    {errors.consentAccepted}
+                  </div>
+                )}
+              </Form.Group>
+            </Col>
+          </Row>
+
+          {/* Professional Info */}
           {role === "healthcare_provider" && (
             <>
               <h5 className="mt-4">Professional Information (Optional)</h5>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Specialization</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={professionalInfo.specialization}
-                  placeholder="Enter specialization"
-                  onChange={(e) =>
-                    handleChange("specialization", e.target.value, true)
-                  }
-                  isInvalid={!!errors.specialization}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.specialization}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Experience</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={professionalInfo.experience}
-                  placeholder="e.g. 10 years"
-                  onChange={(e) =>
-                    handleChange("experience", e.target.value, true)
-                  }
-                  isInvalid={!!errors.experience}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.experience}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>License Number</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={professionalInfo.licenseNumber}
-                  placeholder="Enter license number"
-                  onChange={(e) =>
-                    handleChange("licenseNumber", e.target.value, true)
-                  }
-                  isInvalid={!!errors.licenseNumber}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.licenseNumber}
-                </Form.Control.Feedback>
-              </Form.Group>
+              <Row>
+                <Col md={4}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Specialization</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={professionalInfo.specialization}
+                      placeholder="Enter specialization"
+                      onChange={(e) =>
+                        handleChange("specialization", e.target.value, true)
+                      }
+                      isInvalid={!!errors.specialization}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.specialization}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Col>
+                <Col md={4}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Experience</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={professionalInfo.experience}
+                      placeholder="e.g. 10 years"
+                      onChange={(e) =>
+                        handleChange("experience", e.target.value, true)
+                      }
+                      isInvalid={!!errors.experience}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.experience}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Col>
+                <Col md={4}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>License Number</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={professionalInfo.licenseNumber}
+                      placeholder="Enter license number"
+                      onChange={(e) =>
+                        handleChange("licenseNumber", e.target.value, true)
+                      }
+                      isInvalid={!!errors.licenseNumber}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.licenseNumber}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Col>
+              </Row>
             </>
           )}
 
-          {/* Consent */}
-          <Form.Group className="mb-3">
-            <Form.Check
-              type="checkbox"
-              label="I consent to my health data being used according to the privacy policy"
-              checked={consentAccepted}
-              onChange={(e) =>
-                handleChange("consentAccepted", e.target.checked)
-              }
-              isInvalid={!!errors.consentAccepted}
-            />
-            {errors.consentAccepted && (
-              <div className="invalid-feedback d-block">
-                {errors.consentAccepted}
-              </div>
-            )}
-          </Form.Group>
-
-          {/* Submit */}
-          <Row className="mt-3">
-            <Col className="d-flex justify-content-end">
+          <Row className="mt-4">
+            <Col className="text-end">
               <Button type="submit" variant="primary">
                 Register
               </Button>

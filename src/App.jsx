@@ -12,15 +12,6 @@ import PatientMessages from './pages/patient/PatientMessages'
 export default function App(){
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="bg-white shadow">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <Link to="/" className="font-bold">Wellness Portal</Link>
-          <nav className="flex gap-3 items-center">
-            <Link to="/public/health-info" className="text-sm">Health Info</Link>
-            <Link to="/login" className="text-sm">Login</Link>
-          </nav>
-        </div>
-      </header>
       <main className="flex-1 container mx-auto px-4 py-6">
         <Routes>
           <Route path="/" element={<Home />} />
