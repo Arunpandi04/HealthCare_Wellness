@@ -13,7 +13,7 @@ export function LoginForm() {
 
   const [errors, setErrors] = useState({});
 
-  // ✅ Validation function
+  // ✅ Validation
   const validateForm = () => {
     const newErrors = {};
     const { email, password, role } = formData;
@@ -32,7 +32,7 @@ export function LoginForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // ✅ Handle input change and clear specific field errors
+  // ✅ Handle input & clear error dynamically
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     setErrors((prev) => {
@@ -45,78 +45,96 @@ export function LoginForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validateForm()) return;
+
     console.log("Login:", formData);
-     axios.post("", formData,{
-      headers: {
-        "Content-Type": 'Application/json',
-      }
-    })
+    axios.post("", formData, {
+      headers: { "Content-Type": "application/json" },
+    });
   };
 
   const { email, password, role } = formData;
 
   return (
-    <Container className="d-flex justify-content-center align-items-center min-vh-100 bg-light">
-      <Card className="p-4 shadow-sm" style={{ width: "100%", maxWidth: "400px" }}>
-        <h4 className="text-center mb-4">Login</h4>
+    <Container fluid className="bg-light min-vh-100 d-flex align-items-center justify-content-center">
+      <Row className="w-100 px-3">
+        {/* LEFT SIDE (Illustration / Info for desktop only) */}
+        <Col
+          md={6}
+          className="d-none d-md-flex flex-column justify-content-center align-items-center text-center"
+          style={{ backgroundColor: "#f8f9fa", borderRight: "1px solid #eee" }}
+        >
+          <h2 className="fw-bold text-primary mb-3">Welcome Back!</h2>
+          <p className="text-muted" style={{ maxWidth: "80%" }}>
+            Sign in to access your patient or provider dashboard and manage your health data securely.
+          </p>
+        </Col>
 
-        <Form noValidate onSubmit={handleSubmit}>
-          {/* Email Field */}
-          <Form.Group className="mb-3" controlId="formEmail">
-            <Form.Label>Email</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => handleChange("email", e.target.value)}
-              isInvalid={!!errors.email}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.email}
-            </Form.Control.Feedback>
-          </Form.Group>
+        {/* RIGHT SIDE (Login Card) */}
+        <Col
+          xs={12}
+          md={6}
+          className="d-flex justify-content-center align-items-center py-5"
+        >
+          <Card className="p-4 shadow-sm w-100" style={{ maxWidth: "400px" }}>
+            <h4 className="text-center mb-4">Login</h4>
 
-          {/* Password Field */}
-          <Form.Group className="mb-3" controlId="formPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => handleChange("password", e.target.value)}
-              isInvalid={!!errors.password}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.password}
-            </Form.Control.Feedback>
-          </Form.Group>
+            <Form noValidate onSubmit={handleSubmit}>
+              {/* Email */}
+              <Form.Group className="mb-3" controlId="formEmail">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => handleChange("email", e.target.value)}
+                  isInvalid={!!errors.email}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.email}
+                </Form.Control.Feedback>
+              </Form.Group>
 
-          {/* Role Selection */}
-          <Form.Group className="mb-4" controlId="formRole">
-            <Form.Label>Role</Form.Label>
-            <Form.Select
-              value={role}
-              onChange={(e) => handleChange("role", e.target.value)}
-              isInvalid={!!errors.role}
-            >
-              <option value="patient">Patient</option>
-              <option value="provider">Provider</option>
-            </Form.Select>
-            <Form.Control.Feedback type="invalid">
-              {errors.role}
-            </Form.Control.Feedback>
-          </Form.Group>
+              {/* Password */}
+              <Form.Group className="mb-3" controlId="formPassword">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => handleChange("password", e.target.value)}
+                  isInvalid={!!errors.password}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.password}
+                </Form.Control.Feedback>
+              </Form.Group>
 
-          {/* Submit Button */}
-          <Row>
-            <Col className="d-flex justify-content-end">
-              <Button variant="primary" type="submit">
-                Sign In
-              </Button>
-            </Col>
-          </Row>
-        </Form>
-      </Card>
+              {/* Role */}
+              <Form.Group className="mb-4" controlId="formRole">
+                <Form.Label>Role</Form.Label>
+                <Form.Select
+                  value={role}
+                  onChange={(e) => handleChange("role", e.target.value)}
+                  isInvalid={!!errors.role}
+                >
+                  <option value="patient">Patient</option>
+                  <option value="provider">Provider</option>
+                </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {errors.role}
+                </Form.Control.Feedback>
+              </Form.Group>
+
+              {/* Submit */}
+              <div className="d-grid">
+                <Button variant="primary" type="submit">
+                  Sign In
+                </Button>
+              </div>
+            </Form>
+          </Card>
+        </Col>
+      </Row>
     </Container>
   );
 }
