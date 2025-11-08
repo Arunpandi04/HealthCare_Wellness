@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Container, Form, Button, Card, Row, Col } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -41,15 +42,17 @@ export function LoginForm() {
       return updated;
     });
   };
-
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validateForm()) return;
 
     console.log("Login:", formData);
-    axios.post("", formData, {
-      headers: { "Content-Type": "application/json" },
-    });
+    // axios.post("", formData, {
+    //   headers: { "Content-Type": "application/json" },
+    // });
+    //for now skipping actual API call
+    navigate("/patient/dashboard");
   };
 
   const { email, password, role } = formData;
