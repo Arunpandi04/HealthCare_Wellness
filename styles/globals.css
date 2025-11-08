@@ -1,0 +1,9 @@
+/* Bootstrap provides base styles now. Any Tailwind directives were removed during migration. */
+
+html, body, #__next {
+  height: 100%;
+}
+body {
+  background-color: #f8fafc; /* light gray similar to previous */
+  color: #111827;
+}
