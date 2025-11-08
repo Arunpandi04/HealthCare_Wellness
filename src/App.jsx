@@ -8,10 +8,12 @@ import PatientDashboard from './pages/patient/PatientDashboard'
 import PatientProfile from './pages/patient/PatientProfile'
 import PatientGoals from './pages/patient/PatientGoals'
 import PatientMessages from './pages/patient/PatientMessages'
+import Header from './components/Header'
 
 export default function App(){
   return (
     <div className="min-h-screen flex flex-col">
+      <Header />
       <main className="flex-1 container mx-auto px-4 py-6">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -24,11 +26,6 @@ export default function App(){
           <Route path="/patient/messages" element={<PatientMessages />} />
         </Routes>
       </main>
-      <footer className="bg-white border-t mt-8">
-        <div className="container mx-auto px-4 py-6 text-sm text-gray-600">
-          © {new Date().getFullYear()} Wellness Portal — <Link to="/public/health-info">Privacy</Link>
-        </div>
-      </footer>
     </div>
   )
 }
