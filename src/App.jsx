@@ -4,6 +4,10 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import PublicHealthInfo from './pages/PublicHealthInfo'
+import PatientDashboard from './pages/patient/PatientDashboard'
+import PatientProfile from './pages/patient/PatientProfile'
+import PatientGoals from './pages/patient/PatientGoals'
+import PatientMessages from './pages/patient/PatientMessages'
 
 export default function App(){
   return (
@@ -23,7 +27,10 @@ export default function App(){
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/public/health-info" element={<PublicHealthInfo />} />
-          {/* TODO: add patient/provider routes */}
+          <Route path="/patient/dashboard" element={<PatientDashboard />} />
+          <Route path="/patient/profile" element={<PatientProfile />} />
+          <Route path="/patient/goals" element={<PatientGoals />} />
+          <Route path="/patient/messages" element={<PatientMessages />} />
         </Routes>
       </main>
       <footer className="bg-white border-t mt-8">
